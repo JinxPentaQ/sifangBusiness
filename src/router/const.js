@@ -15,6 +15,7 @@ import merchantList from "@/views/merchant/merchantList.vue";
 import merchantWallet from "@/views/merchant/merchantWallet.vue";
 import merchantWalletRecords from "@/views/merchant/merchantWalletRecords.vue"
 import merchantChannel from '@/views/merchant/merchantChannel.vue'
+import apiDocs from '@/views/merchant/apiDocs.vue'
 
 
 export {
@@ -30,4 +31,5 @@ export {
   merchantWallet,
   merchantWalletRecords,
   merchantChannel,
+  apiDocs
 };

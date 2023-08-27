@@ -39,3 +39,27 @@ export function getHomeData(params) {
     params
   })
 }
+// 重置谷歌密钥
+export function resetBusinessPK(params) {
+  return request({
+    url: 'App/Business_BusinessController/ResetBusinessPK',
+    method: 'post',
+    params
+  })
+}
+// 设置商户后台登录白名单
+export function modBusiness(params) {
+  return request({
+    url: 'App/Business_BusinessController/ModBusiness',
+    method: 'post',
+    params
+  })
+}
+// admin 相关商户API配置白名单
+export function modBusinessAPIConfig(params) {
+  return request({
+    url: 'App/Business_BusinessController/ModBusinessAPIConfig',
+    method: 'post',
+    params
+  })
+}

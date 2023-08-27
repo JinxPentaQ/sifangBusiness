@@ -11,6 +11,7 @@ import {
   merchantWallet,
   merchantWalletRecords,
   merchantChannel,
+  apiDocs
 } from "@/router/const.js";
 
 let routes = [
@@ -55,6 +56,7 @@ let routes = [
         icon: 'el-icon-school',
         children: [
           { path: "/merchantList", component: merchantList, name: "商户信息" },
+          { path: "/merchantApi", component: apiDocs, name: "Api对接文档" },
           { path: "/merchantWallet/:id", component: merchantWallet, name: "商户钱包",  hidden: true },
           { path: "/merchantWalletRecords/:id", component: merchantWalletRecords, name: "商户钱包记录",  hidden: true },
           { path: "/merchantChannel/:id", component: merchantChannel, name: "商户通道配置", hidden: true },

@@ -2,8 +2,7 @@
   <div class="bgDiv">
     <div class="titContent">
       <p>商户系统</p>
-      <label>BACKSTAGE MANGEMENT SYSTEM</label>
-      <!-- <p>欢迎登录</p> -->
+      <label>MERCHANT MANGEMENT SYSTEM</label>
     </div>
     <div class="news">
       <el-button size="mini" @click="drawer = true">更新记录</el-button>

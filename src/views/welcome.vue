@@ -224,6 +224,7 @@
 <script>
 import echarts from "echarts";
 import Qs from "qs";
+import { getInfo } from "@/api/admin";
 export default {
   data() {
     return {
@@ -232,76 +233,76 @@ export default {
           icon: "/static/icon/People.png",
           name: "接单员情况",
           value: "",
-          bgColor: "#3F9EFF"
+          bgColor: "#3F9EFF",
         },
         {
           icon: "/static/icon/EmptyWallet.png",
           name: "接单员账户总余额",
           value: "",
-          bgColor: "#F1A00C"
+          bgColor: "#F1A00C",
         },
         {
           icon: "/static/icon/YenCoin.png",
           name: "接单员佣金总余额",
           value: "",
-          bgColor: "#F46C6C"
+          bgColor: "#F46C6C",
         },
         {
           icon: "/static/icon/YenCoin1.png",
           name: "今日佣金提现金额",
           value: "",
-          bgColor: "#67C23A"
-        }
+          bgColor: "#67C23A",
+        },
       ],
       cardDataP: [
         {
           icon: "/static/icon/Shop.png",
           name: "商户总数",
           value: "",
-          bgColor: "#F2F6FC"
+          bgColor: "#F2F6FC",
         },
         {
           icon: "/static/icon/CashPayment.png",
           name: "今日代收金额",
           value: "",
-          bgColor: "#EBEEF5"
+          bgColor: "#EBEEF5",
         },
         {
           icon: "/static/icon/ExtractMoney.png",
           name: "今日买币金额",
           value: "",
-          bgColor: "#E4E7ED"
+          bgColor: "#E4E7ED",
         },
         {
           icon: "/static/icon/CreditCardFront.png",
           name: "今日下发金额",
           value: "",
-          bgColor: "#E4E7ED"
+          bgColor: "#E4E7ED",
         },
         {
           icon: "/static/icon/Home.png",
           name: "今日交易商户",
           value: "",
-          bgColor: "#F2F6FC"
+          bgColor: "#F2F6FC",
         },
         {
           icon: "/static/icon/PayWithCash.png",
           name: "今日代付金额",
           value: "",
-          bgColor: "#EBEEF5"
+          bgColor: "#EBEEF5",
         },
         {
           icon: "/static/icon/InputMoney.png",
           name: "今日卖币金额",
           value: "",
-          bgColor: "#E4E7ED"
+          bgColor: "#E4E7ED",
         },
         {
           icon: "/static/icon/MultipleCreditCardFront.png",
           name: "商户未下发金额",
           value: "",
-          bgColor: "#E4E7ED"
-        }
+          bgColor: "#E4E7ED",
+        },
       ],
       userAllNumber: "", //接单总人数
       userAllAmount: "", // 账户余额
@@ -316,33 +317,37 @@ export default {
       checkAmount: {
         payalipercent: 0,
         paypercent: 0,
-        paywxpercent: 0
+        paywxpercent: 0,
       },
-      hour: { // 每小时统计图表
+      hour: {
+        // 每小时统计图表
         allamount: [],
-        dateTime: []
+        dateTime: [],
       },
-      days: {  // 日统计图表
+      days: {
+        // 日统计图表
         dayswxAmount: [],
         daysaliAmount: [],
         daysyunAmount: [],
         daysbankAmount: [],
-        dateTime: []
+        dateTime: [],
       },
-      weeks: { // 周统计图表
+      weeks: {
+        // 周统计图表
         weekswxAmount: [],
         weeksaliAmount: [],
         weeksyunAmount: [],
         weeksbankAmount: [],
-        dateTime: []
+        dateTime: [],
       },
-      months: { // 月统计图表
+      months: {
+        // 月统计图表
         monthwxAmount: [],
         monthaliAmount: [],
         monthyunAmount: [],
         monthbankAmount: [],
-        dateTime: []
-      }
+        dateTime: [],
+      },
       //下发
     };
   },
@@ -352,7 +357,7 @@ export default {
       var _this = this;
       let param = {
         offset: "1",
-        limit: "50"
+        limit: "50",
       };
       param = this.sortObjByKey(param);
       let signAll = [];
@@ -366,11 +371,12 @@ export default {
           Qs.stringify(param),
           {
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-            }
+              "Content-Type":
+                "application/x-www-form-urlencoded; charset=UTF-8",
+            },
           }
         )
-        .then(res => {
+        .then((res) => {
           //第一行-------------------------------------------------
           //接单员情况
           this.cardData[0].value = res.data.data.userAlINumber.join("/");
@@ -384,16 +390,19 @@ export default {
           //商户总数
           this.cardDataP[0].value = res.data.data.platformAllNumber.join("/");
           //今日代收金额
-          this.cardDataP[1].value = Number(res.data.data.platformTodayCol) / 100;
+          this.cardDataP[1].value =
+            Number(res.data.data.platformTodayCol) / 100;
           //今日买币余额
           this.cardDataP[2].value = Number(res.data.data.todayUserBuy) / 100;
           //今日下发金额
-          this.cardDataP[3].value = Number(res.data.data.platformTodayOut) / 100;
+          this.cardDataP[3].value =
+            Number(res.data.data.platformTodayOut) / 100;
           // 第三行-------------------------------------------------------------
           //今日交易商户
           this.cardDataP[4].value = res.data.data.todayPlatformCount;
           //今日代付金额
-          this.cardDataP[5].value = Number(res.data.data.platformTodayPayment) / 100;
+          this.cardDataP[5].value =
+            Number(res.data.data.platformTodayPayment) / 100;
           //今日卖币金额
           this.cardDataP[6].value = Number(res.data.data.todayProxySell) / 100;
           //商户未下发金额
@@ -403,9 +412,11 @@ export default {
           this.tableData = res.data.data.platform_present;
 
           for (let i in this.tableData) {
-            this.tableData[i].really_amount = Number(this.tableData[i].really_amount) / 100;
+            this.tableData[i].really_amount =
+              Number(this.tableData[i].really_amount) / 100;
             this.tableData[i].percent =
-              Number(this.tableData[i].really_amount) / Number(this.all_present);
+              Number(this.tableData[i].really_amount) /
+              Number(this.all_present);
             this.tableData[i].percent = (
               this.tableData[i].percent * 100
             ).toFixed(2);
@@ -415,37 +426,61 @@ export default {
 
           // 今日统计成功率===========================================================================
           //今日总金额
-          this.checkAmount.allamount = Number(res.data.data.today_data[0].allamount) / 100;
+          this.checkAmount.allamount =
+            Number(res.data.data.today_data[0].allamount) / 100;
           //今日总笔数
-          this.checkAmount.allcount = Number(res.data.data.today_data[0].allcount);
+          this.checkAmount.allcount = Number(
+            res.data.data.today_data[0].allcount
+          );
           //今日付款总笔数
-          this.checkAmount.payamount = Number(res.data.data.today_data[0].payamount) / 100;
+          this.checkAmount.payamount =
+            Number(res.data.data.today_data[0].payamount) / 100;
           //今日付款总金额
-          this.checkAmount.paycount = Number(res.data.data.today_data[0].paycount);
+          this.checkAmount.paycount = Number(
+            res.data.data.today_data[0].paycount
+          );
           //今日支付宝总金额
-          this.checkAmount.allaliamount = Number(res.data.data.today_data[0].allaliamount) / 100;
+          this.checkAmount.allaliamount =
+            Number(res.data.data.today_data[0].allaliamount) / 100;
           //今日支付宝总笔数
-          this.checkAmount.allalicount = Number(res.data.data.today_data[0].allalicount);
+          this.checkAmount.allalicount = Number(
+            res.data.data.today_data[0].allalicount
+          );
           //今日微信总金额
-          this.checkAmount.allwxamount = Number(res.data.data.today_data[0].allwxamount) / 100;
+          this.checkAmount.allwxamount =
+            Number(res.data.data.today_data[0].allwxamount) / 100;
           //今日微信总笔数
-          this.checkAmount.allwxcount = Number(res.data.data.today_data[0].allwxcount);
+          this.checkAmount.allwxcount = Number(
+            res.data.data.today_data[0].allwxcount
+          );
           //今日银行卡总金额
-          this.checkAmount.allbankamount = Number(res.data.data.today_data[0].allbankamount) / 100;
+          this.checkAmount.allbankamount =
+            Number(res.data.data.today_data[0].allbankamount) / 100;
           //今日银行卡总笔数
-          this.checkAmount.allbankcount = Number(res.data.data.today_data[0].allbankcount);
+          this.checkAmount.allbankcount = Number(
+            res.data.data.today_data[0].allbankcount
+          );
           //今日支付宝支付总金额
-          this.checkAmount.payaliamount = Number(res.data.data.today_data[0].payaliamount) / 100;
+          this.checkAmount.payaliamount =
+            Number(res.data.data.today_data[0].payaliamount) / 100;
           //今日支付宝支付笔数
-          this.checkAmount.payalicount = Number(res.data.data.today_data[0].payalicount);
+          this.checkAmount.payalicount = Number(
+            res.data.data.today_data[0].payalicount
+          );
           //今日微信支付金额
-          this.checkAmount.paywxamount = Number(res.data.data.today_data[0].paywxamount) / 100;
+          this.checkAmount.paywxamount =
+            Number(res.data.data.today_data[0].paywxamount) / 100;
           //今日微信支付笔数
-          this.checkAmount.paywxcount = Number(res.data.data.today_data[0].paywxcount);
+          this.checkAmount.paywxcount = Number(
+            res.data.data.today_data[0].paywxcount
+          );
           //今日银行卡支付金额
-          this.checkAmount.paybankamount = Number(res.data.data.today_data[0].paybankamount) / 100;
+          this.checkAmount.paybankamount =
+            Number(res.data.data.today_data[0].paybankamount) / 100;
           //今日银行卡支付笔数
-          this.checkAmount.paybankcount = Number(res.data.data.today_data[0].paybankcount);
+          this.checkAmount.paybankcount = Number(
+            res.data.data.today_data[0].paybankcount
+          );
 
           //成功率计算
           if (this.checkAmount.allamount == 0) {
@@ -548,7 +583,7 @@ export default {
           }
           this.drawLine();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -564,25 +599,25 @@ export default {
           textStyle: {
             align: "center",
             color: "#FFFFFF",
-            fontSize: 22
-          }
+            fontSize: 22,
+          },
         },
         backgroundColor: "#043491",
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "cross"
-          }
+            type: "cross",
+          },
         },
         legend: {
           x: "center",
           y: "40px",
           textStyle: {
             color: "#f2f2f2",
-            fontSize: 13
+            fontSize: 13,
           },
           icon: "circle",
-          data: ["代收", "代付"]
+          data: ["代收", "代付"],
         },
         // dataZoom: [
         //   {
@@ -608,7 +643,7 @@ export default {
           bottom: "10%",
           left: "2%",
           top: "80px",
-          containLabel: true
+          containLabel: true,
         },
         xAxis: [
           {
@@ -616,50 +651,50 @@ export default {
             data: this.hour.dateTime,
             // name: "时间",
             nameTextStyle: {
-              color: "#d4ffff"
+              color: "#d4ffff",
             },
             axisLine: {
               lineStyle: {
-                color: "#0B4CA9"
-              }
+                color: "#0B4CA9",
+              },
             },
             axisTick: {
-              show: false
+              show: false,
             },
             axisLabel: {
               show: true,
               textStyle: {
                 color: "#FFF",
-                fontSize: 12
-              }
+                fontSize: 12,
+              },
               //interval:0,
               //rotate:30
-            }
-          }
+            },
+          },
         ],
         yAxis: [
           {
             type: "value",
             // name: "次数",
             nameTextStyle: {
-              color: "#d4ffff"
+              color: "#d4ffff",
             },
             position: "left",
             axisLine: {
               lineStyle: {
-                color: "#0B4CA9"
-              }
+                color: "#0B4CA9",
+              },
             },
             splitLine: {
               lineStyle: {
-                color: "#0B4CA9"
-              }
+                color: "#0B4CA9",
+              },
             },
             axisLabel: {
               color: "#d4ffff",
-              fontSize: 12
-            }
-          }
+              fontSize: 12,
+            },
+          },
         ],
         series: [
           {
@@ -669,10 +704,10 @@ export default {
             symbolSize: 12,
             itemStyle: {
               normal: {
-                color: "#FC30EE"
-              }
+                color: "#FC30EE",
+              },
             },
-            data: 10
+            data: 10,
           },
           {
             name: "代收",
@@ -681,12 +716,12 @@ export default {
             symbolSize: 12,
             itemStyle: {
               normal: {
-                color: "#0EF100"
-              }
+                color: "#0EF100",
+              },
             },
-            data: this.hour.allamount
-          }
-        ]
+            data: this.hour.allamount,
+          },
+        ],
       });
 
       let daifuDay = echarts.init(document.getElementById("daifuDay"));
@@ -697,25 +732,25 @@ export default {
           trigger: "axis",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
         grid: {
           left: "2%",
           right: "4%",
           bottom: "14%",
           top: "16%",
-          containLabel: true
+          containLabel: true,
         },
         legend: {
           data: ["微信", "支付宝", "云闪付", "银行卡"],
           right: 10,
           top: 12,
           textStyle: {
-            color: "#fff"
+            color: "#fff",
           },
           itemWidth: 12,
-          itemHeight: 10
+          itemHeight: 10,
           // itemGap: 35
         },
         xAxis: {
@@ -723,16 +758,16 @@ export default {
           data: ["2012", "2013", "2014", "2015", "2016", "2017", "2018"],
           axisLine: {
             lineStyle: {
-              color: "white"
-            }
+              color: "white",
+            },
           },
           axisLabel: {
             // interval: 0,
             // rotate: 40,
             textStyle: {
-              fontFamily: "Microsoft YaHei"
-            }
-          }
+              fontFamily: "Microsoft YaHei",
+            },
+          },
         },
 
         yAxis: {
@@ -740,16 +775,16 @@ export default {
           axisLine: {
             show: false,
             lineStyle: {
-              color: "white"
-            }
+              color: "white",
+            },
           },
           splitLine: {
             show: true,
             lineStyle: {
-              color: "rgba(255,255,255,0.3)"
-            }
+              color: "rgba(255,255,255,0.3)",
+            },
           },
-          axisLabel: {}
+          axisLabel: {},
         },
         dataZoom: [
           {
@@ -763,20 +798,20 @@ export default {
               "path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z",
             handleSize: "110%",
             handleStyle: {
-              color: "#d3dee5"
+              color: "#d3dee5",
             },
             textStyle: {
-              color: "#fff"
+              color: "#fff",
             },
-            borderColor: "#90979c"
+            borderColor: "#90979c",
           },
           {
             type: "inside",
             show: true,
             height: 15,
             start: 1,
-            end: 35
-          }
+            end: 35,
+          },
         ],
         series: [
           {
@@ -788,18 +823,18 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "#8bd46e"
+                    color: "#8bd46e",
                   },
                   {
                     offset: 1,
-                    color: "#09bcb7"
-                  }
+                    color: "#09bcb7",
+                  },
                 ]),
-                barBorderRadius: 12
-              }
+                barBorderRadius: 12,
+              },
             },
             // data: [400, 400, 300, 300, 300, 400, 400, 400, 300]
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             name: "支付宝",
@@ -818,17 +853,17 @@ export default {
                   // }
                   {
                     offset: 0,
-                    color: "#248ff7"
+                    color: "#248ff7",
                   },
                   {
                     offset: 1,
-                    color: "#6851f1"
-                  }
+                    color: "#6851f1",
+                  },
                 ]),
-                barBorderRadius: 11
-              }
+                barBorderRadius: 11,
+              },
             },
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             name: "云闪付",
@@ -839,17 +874,17 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "#f85032"
+                    color: "#f85032",
                   },
                   {
                     offset: 1,
-                    color: "#e73827"
-                  }
+                    color: "#e73827",
+                  },
                 ]),
-                barBorderRadius: 11
-              }
+                barBorderRadius: 11,
+              },
             },
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             name: "银行卡",
@@ -860,19 +895,19 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "#fccb05"
+                    color: "#fccb05",
                   },
                   {
                     offset: 1,
-                    color: "#f5804d"
-                  }
+                    color: "#f5804d",
+                  },
                 ]),
-                barBorderRadius: 11
-              }
+                barBorderRadius: 11,
+              },
             },
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0]
-          }
-        ]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          },
+        ],
       });
 
       let daifuWeek = echarts.init(document.getElementById("daifuWeek"));
@@ -885,22 +920,22 @@ export default {
           y: "-5",
           textStyle: {
             fontSize: 16,
-            color: "#fff"
-          }
+            color: "#fff",
+          },
         },
         legend: {
           icon: "line",
           top: 20,
           textStyle: {
             color: "#fff",
-            data: ["原方案", "建议方案"]
+            data: ["原方案", "建议方案"],
           },
 
           itemWidth: 10, // 设置宽度
-          itemHeight: 10 // 设置高度
+          itemHeight: 10, // 设置高度
         },
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
         },
         xAxis: {
           //x轴
@@ -931,14 +966,14 @@ export default {
             rotate: -40,
             textStyle: {
               fontSize: 12,
-              color: "#fff"
-            }
+              color: "#fff",
+            },
           },
           axisLine: {
             lineStyle: {
-              color: "#fff"
-            }
-          }
+              color: "#fff",
+            },
+          },
         },
         yAxis: {
           //y轴
@@ -953,9 +988,9 @@ export default {
           axisLabel: {
             textStyle: {
               fontSize: 12,
-              color: "#fff"
-            }
-          }
+              color: "#fff",
+            },
+          },
           // axisLine: {
           //   show: false,
           //   lineStyle: {
@@ -970,16 +1005,16 @@ export default {
             type: "line",
             smooth: true, //折线是否平滑
             areaStyle: {
-              opacity: 0
+              opacity: 0,
             },
             itemStyle: {
               normal: {
                 color: "#197CD8", //小圆点的颜色
                 lineStyle: {
-                  color: "#197CD8" //折线的颜色
-                }
-              }
-            }
+                  color: "#197CD8", //折线的颜色
+                },
+              },
+            },
           },
           {
             name: "建议方案",
@@ -987,28 +1022,28 @@ export default {
             type: "line",
             smooth: true, //是否平滑
             areaStyle: {
-              opacity: 0
+              opacity: 0,
             },
             itemStyle: {
               normal: {
                 color: "#2B9F50", //小圆点的颜色
                 lineStyle: {
-                  color: "#2B9F50" //折线的颜色
-                }
-              }
-            }
-          }
-        ]
+                  color: "#2B9F50", //折线的颜色
+                },
+              },
+            },
+          },
+        ],
       });
       let daifuMonth = echarts.init(document.getElementById("daifuMonth"));
       daifuMonth.setOption({
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
         },
         legend: {
           color: ["#F58080", "#47D8BE", "#F9A589"],
           data: ["微信", "支付宝", "云闪付", "银行卡"],
-          left: "center"
+          left: "center",
           // bottom: "bottom"
         },
         grid: {
@@ -1017,16 +1052,16 @@ export default {
           right: "4%",
           bottom: "3%",
           height: "80%",
-          containLabel: true
+          containLabel: true,
         },
         xAxis: {
           type: "category",
           data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
           axisLine: {
             lineStyle: {
-              color: "#999"
-            }
-          }
+              color: "#999",
+            },
+          },
         },
         yAxis: {
           type: "value",
@@ -1034,21 +1069,21 @@ export default {
           splitLine: {
             lineStyle: {
               type: "dashed",
-              color: "#DDD"
-            }
+              color: "#DDD",
+            },
           },
           axisLine: {
             show: false,
             lineStyle: {
-              color: "#333"
-            }
+              color: "#333",
+            },
           },
           nameTextStyle: {
-            color: "#999"
+            color: "#999",
           },
           splitArea: {
-            show: false
-          }
+            show: false,
+          },
         },
         series: [
           {
@@ -1065,23 +1100,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#FFCAD4" // 0% 处的颜色
+                      color: "#FFCAD4", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#F58080" // 100% 处的颜色
+                      color: "#F58080", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#F58080" // 100% 处的颜色
-                    }
+                      color: "#F58080", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(245,128,128, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1089,10 +1124,10 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#F58080"
-              }
+                borderColor: "#F58080",
+              },
             },
-            smooth: true
+            smooth: true,
           },
           {
             name: "支付宝",
@@ -1107,23 +1142,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#AAF487" // 0% 处的颜色
+                      color: "#AAF487", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#47D8BE" // 100% 处的颜色
+                      color: "#47D8BE", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#47D8BE" // 100% 处的颜色
-                    }
+                      color: "#47D8BE", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(71,216,190, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1131,10 +1166,10 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#AAF487"
-              }
+                borderColor: "#AAF487",
+              },
             },
-            smooth: true
+            smooth: true,
           },
           {
             name: "云闪付",
@@ -1149,23 +1184,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#F6D06F" // 0% 处的颜色
+                      color: "#F6D06F", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#F9A589" // 100% 处的颜色
+                      color: "#F9A589", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#F9A589" // 100% 处的颜色
-                    }
+                      color: "#F9A589", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(249,165,137, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1173,10 +1208,10 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#F6D06F"
-              }
+                borderColor: "#F6D06F",
+              },
             },
-            smooth: true
+            smooth: true,
           },
           {
             name: "银行卡",
@@ -1190,23 +1225,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#F6D06F" // 0% 处的颜色
+                      color: "#F6D06F", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#F9A589" // 100% 处的颜色
+                      color: "#F9A589", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#F9A589" // 100% 处的颜色
-                    }
+                      color: "#F9A589", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(249,165,137, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1214,12 +1249,12 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#F6D06F"
-              }
+                borderColor: "#F6D06F",
+              },
             },
-            smooth: true
-          }
-        ]
+            smooth: true,
+          },
+        ],
       });
       let daishouDay = echarts.init(document.getElementById("daishouDay"));
       // 绘制图表
@@ -1230,25 +1265,25 @@ export default {
           trigger: "axis",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
         grid: {
           left: "2%",
           right: "4%",
           bottom: "14%",
           top: "16%",
-          containLabel: true
+          containLabel: true,
         },
         legend: {
           data: ["微信", "支付宝", "云闪付", "银行卡"],
           right: 10,
           top: 12,
           textStyle: {
-            color: "#fff"
+            color: "#fff",
           },
           itemWidth: 12,
-          itemHeight: 10
+          itemHeight: 10,
           // itemGap: 35
         },
         xAxis: {
@@ -1256,16 +1291,16 @@ export default {
           data: this.days.dateTime, // 日期
           axisLine: {
             lineStyle: {
-              color: "white"
-            }
+              color: "white",
+            },
           },
           axisLabel: {
             // interval: 0,
             // rotate: 40,
             textStyle: {
-              fontFamily: "Microsoft YaHei"
-            }
-          }
+              fontFamily: "Microsoft YaHei",
+            },
+          },
         },
 
         yAxis: {
@@ -1273,16 +1308,16 @@ export default {
           axisLine: {
             show: false,
             lineStyle: {
-              color: "white"
-            }
+              color: "white",
+            },
           },
           splitLine: {
             show: true,
             lineStyle: {
-              color: "rgba(255,255,255,0.3)"
-            }
+              color: "rgba(255,255,255,0.3)",
+            },
           },
-          axisLabel: {}
+          axisLabel: {},
         },
         series: [
           {
@@ -1294,17 +1329,17 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "#8bd46e"
+                    color: "#8bd46e",
                   },
                   {
                     offset: 1,
-                    color: "#09bcb7"
-                  }
+                    color: "#09bcb7",
+                  },
                 ]),
-                barBorderRadius: 0
-              }
+                barBorderRadius: 0,
+              },
             },
-            data: this.days.dayswxAmount
+            data: this.days.dayswxAmount,
           },
           {
             name: "支付宝",
@@ -1323,17 +1358,17 @@ export default {
                   // }
                   {
                     offset: 0,
-                    color: "#248ff7"
+                    color: "#248ff7",
                   },
                   {
                     offset: 1,
-                    color: "#6851f1"
-                  }
+                    color: "#6851f1",
+                  },
                 ]),
-                barBorderRadius: 0
-              }
+                barBorderRadius: 0,
+              },
             },
-            data: this.days.daysaliAmount
+            data: this.days.daysaliAmount,
           },
           {
             name: "云闪付",
@@ -1344,17 +1379,17 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "#f85032"
+                    color: "#f85032",
                   },
                   {
                     offset: 1,
-                    color: "#e73827"
-                  }
+                    color: "#e73827",
+                  },
                 ]),
-                barBorderRadius: 11
-              }
+                barBorderRadius: 11,
+              },
             },
-            data: this.days.daysyunAmount
+            data: this.days.daysyunAmount,
           },
           {
             name: "银行卡",
@@ -1365,19 +1400,19 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "#fccb05"
+                    color: "#fccb05",
                   },
                   {
                     offset: 1,
-                    color: "#f5804d"
-                  }
+                    color: "#f5804d",
+                  },
                 ]),
-                barBorderRadius: 11
-              }
+                barBorderRadius: 11,
+              },
             },
-            data: this.days.daysbankAmount
-          }
-        ]
+            data: this.days.daysbankAmount,
+          },
+        ],
       });
       let daishouWeek = echarts.init(document.getElementById("daishouWeek"));
       daishouWeek.setOption({
@@ -1389,8 +1424,8 @@ export default {
           y: "-5",
           textStyle: {
             fontSize: 16,
-            color: "#fff"
-          }
+            color: "#fff",
+          },
         },
         legend: {
           icon: "line",
@@ -1398,21 +1433,21 @@ export default {
           textStyle: {
             left: "center",
             color: "#fff",
-            data: ["微信", "支付宝", "云闪付", "银行卡"]
+            data: ["微信", "支付宝", "云闪付", "银行卡"],
           },
 
           itemWidth: 10, // 设置宽度
-          itemHeight: 10 // 设置高度
+          itemHeight: 10, // 设置高度
         },
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
         },
         grid: {
           left: "2%",
           right: "15%",
           bottom: "10%",
           top: "16%",
-          containLabel: true
+          containLabel: true,
         },
         xAxis: {
           //x轴
@@ -1424,14 +1459,14 @@ export default {
             rotate: -40,
             textStyle: {
               fontSize: 12,
-              color: "#fff"
-            }
+              color: "#fff",
+            },
           },
           axisLine: {
             lineStyle: {
-              color: "#fff"
-            }
-          }
+              color: "#fff",
+            },
+          },
         },
         yAxis: {
           //y轴
@@ -1446,9 +1481,9 @@ export default {
           axisLabel: {
             textStyle: {
               fontSize: 12,
-              color: "#fff"
-            }
-          }
+              color: "#fff",
+            },
+          },
           // axisLine: {
           //   show: false,
           //   lineStyle: {
@@ -1463,16 +1498,16 @@ export default {
             type: "line",
             smooth: true, //折线是否平滑
             areaStyle: {
-              opacity: 0
+              opacity: 0,
             },
             itemStyle: {
               normal: {
                 color: "#2B9F50", //小圆点的颜色
                 lineStyle: {
-                  color: "#2B9F50" //折线的颜色
-                }
-              }
-            }
+                  color: "#2B9F50", //折线的颜色
+                },
+              },
+            },
           },
           {
             name: "支付宝",
@@ -1480,16 +1515,16 @@ export default {
             type: "line",
             smooth: true, //是否平滑
             areaStyle: {
-              opacity: 0
+              opacity: 0,
             },
             itemStyle: {
               normal: {
                 color: "#197CD8", //小圆点的颜色
                 lineStyle: {
-                  color: "#197CD8" //折线的颜色
-                }
-              }
-            }
+                  color: "#197CD8", //折线的颜色
+                },
+              },
+            },
           },
           {
             name: "云闪付",
@@ -1497,16 +1532,16 @@ export default {
             type: "line",
             smooth: true, //折线是否平滑
             areaStyle: {
-              opacity: 0
+              opacity: 0,
             },
             itemStyle: {
               normal: {
                 color: "#F58080", //小圆点的颜色
                 lineStyle: {
-                  color: "#F58080" //折线的颜色
-                }
-              }
-            }
+                  color: "#F58080", //折线的颜色
+                },
+              },
+            },
           },
           {
             name: "银行卡",
@@ -1514,28 +1549,28 @@ export default {
             type: "line",
             smooth: true, //是否平滑
             areaStyle: {
-              opacity: 0
+              opacity: 0,
             },
             itemStyle: {
               normal: {
                 color: "#F6D06F", //小圆点的颜色
                 lineStyle: {
-                  color: "#F6D06F" //折线的颜色
-                }
-              }
-            }
-          }
-        ]
+                  color: "#F6D06F", //折线的颜色
+                },
+              },
+            },
+          },
+        ],
       });
       let daishouMonth = echarts.init(document.getElementById("daishouMonth"));
       daishouMonth.setOption({
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
         },
         legend: {
           color: ["#47D8BE", "#47D8BE", "#F58080", "#F9A589"],
           data: ["微信", "支付宝", "云闪付", "银行卡"],
-          left: "center"
+          left: "center",
           // bottom: "bottom"
         },
         grid: {
@@ -1544,16 +1579,16 @@ export default {
           right: "4%",
           bottom: "3%",
           height: "80%",
-          containLabel: true
+          containLabel: true,
         },
         xAxis: {
           type: "category",
           data: this.months.dateTime,
           axisLine: {
             lineStyle: {
-              color: "#999"
-            }
-          }
+              color: "#999",
+            },
+          },
         },
         yAxis: {
           type: "value",
@@ -1561,21 +1596,21 @@ export default {
           splitLine: {
             lineStyle: {
               type: "dashed",
-              color: "#DDD"
-            }
+              color: "#DDD",
+            },
           },
           axisLine: {
             show: false,
             lineStyle: {
-              color: "#333"
-            }
+              color: "#333",
+            },
           },
           nameTextStyle: {
-            color: "#999"
+            color: "#999",
           },
           splitArea: {
-            show: false
-          }
+            show: false,
+          },
         },
         series: [
           {
@@ -1591,23 +1626,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#AAF487" // 0% 处的颜色
+                      color: "#AAF487", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#47D8BE" // 100% 处的颜色
+                      color: "#47D8BE", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#47D8BE" // 100% 处的颜色
-                    }
+                      color: "#47D8BE", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(71,216,190, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1615,10 +1650,10 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#AAF487"
-              }
+                borderColor: "#AAF487",
+              },
             },
-            smooth: true
+            smooth: true,
           },
           {
             name: "支付宝",
@@ -1633,23 +1668,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#3a7bd5" // 0% 处的颜色
+                      color: "#3a7bd5", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#3a6073" // 100% 处的颜色
+                      color: "#3a6073", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#3a6073" // 100% 处的颜色
-                    }
+                      color: "#3a6073", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "#3a7bd5",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1657,10 +1692,10 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: '#3a6073',
                      shadowBlur: 100,*/
-                borderColor: "#3a7bd5"
-              }
+                borderColor: "#3a7bd5",
+              },
             },
-            smooth: true
+            smooth: true,
           },
           {
             name: "云闪付",
@@ -1676,23 +1711,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#FFCAD4" // 0% 处的颜色
+                      color: "#FFCAD4", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#F58080" // 100% 处的颜色
+                      color: "#F58080", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#F58080" // 100% 处的颜色
-                    }
+                      color: "#F58080", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(245,128,128, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1700,10 +1735,10 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#F58080"
-              }
+                borderColor: "#F58080",
+              },
             },
-            smooth: true
+            smooth: true,
           },
           {
             name: "银行卡",
@@ -1718,23 +1753,23 @@ export default {
                   colorStops: [
                     {
                       offset: 0,
-                      color: "#F6D06F" // 0% 处的颜色
+                      color: "#F6D06F", // 0% 处的颜色
                     },
                     {
                       offset: 0.4,
-                      color: "#F9A589" // 100% 处的颜色
+                      color: "#F9A589", // 100% 处的颜色
                     },
                     {
                       offset: 1,
-                      color: "#F9A589" // 100% 处的颜色
-                    }
+                      color: "#F9A589", // 100% 处的颜色
+                    },
                   ],
-                  globalCoord: false // 缺省为 false
+                  globalCoord: false, // 缺省为 false
                 },
                 shadowColor: "rgba(249,165,137, 0.5)",
                 shadowBlur: 10,
-                shadowOffsetY: 7
-              }
+                shadowOffsetY: 7,
+              },
             },
             itemStyle: {
               normal: {
@@ -1742,17 +1777,23 @@ export default {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                      shadowBlur: 100,*/
-                borderColor: "#F6D06F"
-              }
+                borderColor: "#F6D06F",
+              },
             },
-            smooth: true
-          }
-        ]
+            smooth: true,
+          },
+        ],
+      });
+    },
+    //获取列表
+    getData() {
+      getInfo().then((res) => {
+        sessionStorage.setItem("docs", res.docs_url);
       });
     },
     //
     compare(attr) {
-      return function(a, b) {
+      return function (a, b) {
         var val1 = a[attr];
         var val2 = b[attr];
         return val2 - val1;
@@ -1767,13 +1808,13 @@ export default {
         newObj[index] = obj[index];
       }
       return newObj;
-    }
+    },
   },
   mounted() {
     //初始化要放在mounted方法中
 
-    this.getUsers();
-  }
+    this.getData();
+  },
 };
 </script>
 <style>
