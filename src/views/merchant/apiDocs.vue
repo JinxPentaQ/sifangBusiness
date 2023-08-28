@@ -1,9 +1,9 @@
 <template>
   <div>
     <iframe
-      :src="url"
+      src="https://api.tmqpay.com/docs.php"
       frameborder="0"
-      :style="{ height: ifHeight, width: '100%', 'margin-left': '10px' }"
+      :style="{ height: '600px', width: '100%'}"
     ></iframe>
   </div>
 </template>
