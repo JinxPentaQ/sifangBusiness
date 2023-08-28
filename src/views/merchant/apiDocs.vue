@@ -1,7 +1,7 @@
 <template>
   <div>
     <iframe
-      src="https://api.tmqpay.com/docs.php"
+      :src="url"
       frameborder="0"
       :style="{ height: '600px', width: '100%'}"
     ></iframe>
