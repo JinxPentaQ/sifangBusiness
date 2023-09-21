@@ -3,13 +3,13 @@
     <div class="tableDivs">
       <div class="toolNav">
         <div class="toolNavList">
-          <el-button
-            type="primary"
-            icon="el-icon-circle-plus-outline"
-            size="small"
-            @click="newsFormVisible = true"
-            >添加</el-button
-          >
+<!--          <el-button-->
+<!--            type="primary"-->
+<!--            icon="el-icon-circle-plus-outline"-->
+<!--            size="small"-->
+<!--            @click="newsFormVisible = true"-->
+<!--            >添加</el-button-->
+<!--          >-->
         </div>
       </div>
       <!--列表-->
@@ -20,26 +20,30 @@
         v-loading="listLoading"
       >
         <el-table-column
-          prop="currency_name"
-          label="币种名称"
+          prop="channel_currency_name"
+          label="通道_币种"
           align="left"
-          min-width="100"
+          min-width="120"
         />
         <el-table-column
-          prop="currency_code"
-          label="币种Code"
+          prop="currency_name"
+          label="币种"
           align="left"
           min-width="100"
         />
         <el-table-column
           prop="buy_rate"
-          label="购买费率"
+          label="代收费率"
           align="left"
           min-width="100"
-        />
+        >
+            <template slot-scope="scope">
+                {{ filterNumber( scope.row.buy_rate) }}
+            </template>
+        </el-table-column>
         <el-table-column
           prop="buy_is_open"
-          label="购买通道是否开启"
+          label="代收通道状态"
           align="left"
           min-width="100"
         >
@@ -47,78 +51,70 @@
             {{ getOptionsText(channelOpenOptions, scope.row.buy_is_open) }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="buy_specify_type"
-          label="买入指定类型"
-          align="left"
-          min-width="100"
-        >
-          <template slot-scope="scope">
-            {{ getOptionsText(bySellTypeOptions, scope.row.buy_is_open) }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="buy_specify"
-          label="买入指定用户ID"
-          align="left"
-          min-width="100"
-        />
+
         <el-table-column
           prop="buy_max_amount"
-          label="购买最大费率"
+          label="代收最大金额"
           align="left"
           min-width="100"
-        />
+        >
+          <template slot-scope="scope">
+            {{ filterNumber( scope.row.buy_max_amount) }}
+          </template>
+        </el-table-column>
+
         <el-table-column
           prop="buy_min_amount"
-          label="购买最小费率"
+          label="代收最小金额"
           align="left"
           min-width="100"
-        ></el-table-column>
+        >
+        <template slot-scope="scope">
+            {{ filterNumber( scope.row.buy_min_amount) }}
+        </template>
+        </el-table-column>
         <el-table-column
           prop="sell_rate"
-          label="	卖出费率"
+          label="代付费率"
           align="left"
           min-width="100"
-        ></el-table-column>
+        >
+            <template slot-scope="scope">
+                {{ filterNumber( scope.row.sell_rate) }}
+            </template>
+        </el-table-column>
         <el-table-column
           prop="sell_is_open"
-          label="	卖出通道是否开启"
+          label="代付通道状态"
           align="left"
           min-width="100"
         >
           <template slot-scope="scope">
-            {{ getOptionsText(channelOpenOptions, scope.row.buy_is_open) }}
+            {{ getOptionsText(channelOpenOptions, scope.row.sell_is_open) }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="sell_specify_type"
-          label="	卖出指定类型"
-          align="left"
-          min-width="100"
-        >
-          <template slot-scope="scope">
-            {{ getOptionsText(bySellTypeOptions, scope.row.buy_is_open) }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="sell_specify"
-          label="	卖出指定用户ID"
-          align="left"
-          min-width="100"
-        ></el-table-column>
+
+
         <el-table-column
           prop="sell_max_amount"
-          label="卖出最大费率"
+          label="代付最大金额"
           align="left"
           min-width="100"
-        ></el-table-column>
+        >
+            <template slot-scope="scope">
+                {{ filterNumber( scope.row.sell_max_amount) }}
+            </template>
+        </el-table-column>
         <el-table-column
           prop="sell_min_amount"
-          label="卖出最小费率"
+          label="代付最小金额"
           align="left"
           min-width="100"
-        ></el-table-column>
+        >
+            <template slot-scope="scope">
+                {{ filterNumber( scope.row.sell_min_amount) }}
+            </template>
+        </el-table-column>
         <el-table-column label="操作" align="left">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)" size="mini"
@@ -138,55 +134,49 @@
         style="float: right; margin: 15px"
       ></el-pagination>
     </div>
-    <!--新增-->
-    <el-dialog
-      title="添加商户通道配置"
-      :visible.sync="newsFormVisible"
-      width="50%"
-    >
-      <el-form :model="news" ref="news" :rules="rules">
-        <el-form-item
-          prop="channel_currency_id"
-          label="通道货币"
-          :label-width="formLabelWidth"
-        >
-          <el-select v-model="news.channel_currency_id" placeholder="货币">
-            <el-option
-              v-for="item in currencyList"
-              :key="item.id"
-              :label="item.channel_currency_name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="mini" @click="handleAdd('news')"
-          >确定</el-button
-        >
-        <el-button size="mini" @click="newsFormVisible = false">取消</el-button>
-      </div>
-    </el-dialog>
-    <!--新增-->
+<!--    &lt;!&ndash;新增&ndash;&gt;-->
+<!--    <el-dialog-->
+<!--      title="添加商户通道配置"-->
+<!--      :visible.sync="newsFormVisible"-->
+<!--      width="50%"-->
+<!--    >-->
+<!--      <el-form :model="news" ref="news" :rules="rules">-->
+<!--        <el-form-item-->
+<!--          prop="channel_currency_id"-->
+<!--          label="通道货币"-->
+<!--          :label-width="formLabelWidth"-->
+<!--        >-->
+<!--          <el-select v-model="news.channel_currency_id" placeholder="货币">-->
+<!--            <el-option-->
+<!--              v-for="item in currencyList"-->
+<!--              :key="item.id"-->
+<!--              :label="item.channel_currency_name"-->
+<!--              :value="item.id"-->
+<!--            ></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+<!--      <div slot="footer" class="dialog-footer">-->
+<!--        <el-button type="primary" size="mini" @click="handleAdd('news')"-->
+<!--          >确定</el-button-->
+<!--        >-->
+<!--        <el-button size="mini" @click="newsFormVisible = false">取消</el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
+<!--    &lt;!&ndash;新增&ndash;&gt;-->
     <el-dialog
       title="编辑商户通道配置"
       :visible.sync="editFormVisible"
       width="50%"
     >
       <el-form :model="edit" ref="edit" :rules="rules">
-        <el-form-item
-          prop="buy_rate"
-          label="购买费率"
-          :label-width="formLabelWidth"
-        >
-          <el-input v-model="edit.buy_rate" placeholder="购买费率"></el-input>
-        </el-form-item>
+
         <el-form-item
           prop="buy_is_open"
-          label="购买通道是否开启"
+          label="代收通道是否开启"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="edit.buy_is_open" placeholder="购买通道是否开启">
+          <el-select v-model="edit.buy_is_open" placeholder="代收通道是否开启">
             <el-option
               v-for="item in channelOpenOptions"
               :key="item.value"
@@ -195,63 +185,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          prop="buy_specify_type"
-          label="买入指定类型"
-          :label-width="formLabelWidth"
-        >
-          <el-select v-model="edit.buy_specify_type" placeholder="买入指定类型">
-            <el-option
-              v-for="item in bySellTypeOptions"
-              :key="item.value"
-              :label="item.text"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          prop="buy_specify"
-          label="买入指定用户ID"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="edit.buy_specify"
-            placeholder="买入指定用户ID，请使用逗号分隔输入"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          prop="buy_max_amount"
-          label="购买最大费率"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="edit.buy_max_amount"
-            placeholder="购买最大费率"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          prop="buy_min_amount"
-          label="购买最小费率"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="edit.buy_min_amount"
-            placeholder="购买最小费率"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          prop="sell_rate"
-          label="卖出费率"
-          :label-width="formLabelWidth"
-        >
-          <el-input v-model="edit.sell_rate" placeholder="卖出费率"></el-input>
-        </el-form-item>
+
         <el-form-item
           prop="sell_is_open"
-          label="卖出通道是否开启"
+          label="代付通道是否开启"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="edit.sell_is_open" placeholder="卖出通道是否开启">
+          <el-select v-model="edit.sell_is_open" placeholder="代付通道是否开启">
             <el-option
               v-for="item in channelOpenOptions"
               :key="item.value"
@@ -260,53 +200,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          prop="sell_specify_type"
-          label="卖出指定类型"
-          :label-width="formLabelWidth"
-        >
-          <el-select
-            v-model="edit.sell_specify_type"
-            placeholder="卖出指定类型"
-          >
-            <el-option
-              v-for="item in bySellTypeOptions"
-              :key="item.value"
-              :label="item.text"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          prop="sell_specify"
-          label="卖出指定用户ID"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="edit.sell_specify"
-            placeholder="卖出指定用户ID，请使用逗号分隔输入"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          prop="sell_max_amount"
-          label="卖出最大费率"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="edit.sell_max_amount"
-            placeholder="卖出最大费率"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          prop="sell_min_amount"
-          label="卖出最小费率"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="edit.sell_min_amount"
-            placeholder="卖出最小费率"
-          ></el-input>
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" size="mini" @click="editSubmit('edit')"
@@ -333,7 +227,7 @@ import {
   channelOpenOptions,
   bySellTypeOptions,
 } from "@/utils/const";
-import { getOptionsText } from "@/utils/func";
+import { getOptionsText,filterNumber } from "@/utils/func";
 export default {
   data() {
     return {
@@ -369,6 +263,7 @@ export default {
   },
   methods: {
     getOptionsText,
+      filterNumber,
     //分页
     handleCurrentChange(val) {
       this.page = val;
@@ -388,6 +283,8 @@ export default {
     getData() {
       getsBusinessChannelConfig({
         business_id: this.$route.params.id,
+        page: this.page,
+          limit: this.pageSize,
       })
         .then((res) => {
           console.log(res, "ddd");

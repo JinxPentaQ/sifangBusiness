@@ -3,12 +3,7 @@
     <div class="tableDivs">
       <div class="toolNav">
         <div class="toolNavList">
-          <el-button
-            type="primary"
-            icon="el-icon-circle-plus-outline"
-            size="mini"
-            @click="newsFormVisible = true;"
-          >新增</el-button>
+
         </div>
       </div>
       <!--列表-->
@@ -31,12 +26,12 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="通道描述"></el-table-column>
-        <el-table-column label="操作" align="left">
-          <template slot-scope="scope">
-            <el-button type="text" @click="deleteHandle(scope.row.id)" size="mini">删除</el-button>
-          </template>
-        </el-table-column>
+        <el-table-column prop="desc" label="通道描述"></el-table-column>
+<!--        <el-table-column label="操作" align="left">-->
+<!--          <template slot-scope="scope">-->
+<!--            <el-button type="text" @click="deleteHandle(scope.row.id)" size="mini">删除</el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -148,56 +143,18 @@ export default {
     // 获取用户列表
     getData() {
       this.listLoading = true;
-      getsChannel()
+      getsChannel({
+        limit: this.pageSize,
+        page: this.page,
+      })
         .then((res) => {
           this.listLoading = false;
-          this.tableData = res;
+          this.tableData = res.items;
+          this.total = res.total;
         })
         .catch((err) => {
           console.log(err);
         });
-    },
-    //新增
-    addSubmit(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          addChannel(this.news)
-            .then(() => {
-              this.$message({
-                message: "操作成功",
-                type: "success",
-              });
-              this.$refs[formName].resetFields();
-              this.newsFormVisible = false;
-              this.getData();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      });
-    },
-    //删除用户
-    deleteHandle(id) {
-      this.$confirm("确认删除该通道吗?", "提示", {
-        type: "warning",
-      })
-        .then(() => {
-          this.listLoading = true;
-          delChannel({ id })
-            .then((res) => {
-              this.$message({
-                message: "操作成功",
-                type: "success",
-              });
-              this.listLoading = false;
-              this.getData();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch(() => {});
     },
   },
   created() {

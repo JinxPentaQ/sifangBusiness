@@ -10,3 +10,6 @@ export const getOptionsItem = (list, value) => {
   const valueList = list.filter((item) => +item.value === +value);
   return valueList.length > 0 ? valueList[0] : {};
 }
+export const filterNumber = (str) => {
+  return str ? str.replace(/\.?0+$/, "") : "";
+};

@@ -44,15 +44,7 @@ export const orderTypeOptions = [
   {
     text: '商户代付',
     value: '2'
-  },
-  {
-    text: '用户充值',
-    value: '3'
-  },
-  {
-    text: '用户提现',
-    value: '4'
-  },
+  }
 ]
 export const exchangeOrderTypeOptions = [
   {
@@ -259,5 +251,21 @@ export const bySellTypeOptions = [
   {
     text: '平台',
     value: bySellType.platform,
+  },
+]
+
+//回调状态
+export const notifyStatus = [
+  {
+    text: "进行中",
+    value: '1',
+  },
+  {
+    text: "成功",
+    value: '2',
+  },
+  {
+    text: "失败",
+    value: '3',
   },
 ]

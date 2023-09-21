@@ -85,13 +85,6 @@
         @click="handleWalletRecords(detail.id)"
         >钱包记录</el-button
       >
-      <el-button
-        type="text"
-        size="mini"
-        icon="el-icon-s-shop"
-        @click="handleCurrenyChannel(detail.id)"
-        >通道配置</el-button
-      >
     </el-card>
   </section>
 </template>
