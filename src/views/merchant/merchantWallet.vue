@@ -31,24 +31,29 @@
           align="left"
           min-width="100"
         />
+
         <el-table-column
           prop="balance_fee"
           label="余额"
           align="left"
           min-width="100"
-        />
-        <el-table-column
-          prop="business_no"
-          label="商户编号"
-          align="left"
-          min-width="100"
-        />
-        <el-table-column
-          prop="business_name"
-          label="商户名称"
-          align="left"
-          min-width="100"
-        />
+        >
+            <template slot-scope="scope">
+                {{ filterNumber( scope.row.balance_fee) }}
+            </template>
+        </el-table-column>
+<!--        <el-table-column-->
+<!--          prop="business_no"-->
+<!--          label="商户编号"-->
+<!--          align="left"-->
+<!--          min-width="100"-->
+<!--        />-->
+<!--        <el-table-column-->
+<!--          prop="business_name"-->
+<!--          label="商户名称"-->
+<!--          align="left"-->
+<!--          min-width="100"-->
+<!--        />-->
         <el-table-column
           prop="remark"
           label="备注"
@@ -56,8 +61,8 @@
           min-width="100"
         ></el-table-column>
         <el-table-column
-          prop="create_time"
-          label="创建时间"
+          prop="update_time"
+          label="更新时间"
           align="left"
           min-width="100"
         ></el-table-column>
@@ -75,7 +80,7 @@
             <el-option
               v-for="item in currencyList"
               :key="item.id"
-              :label="item.channel_currency_name"
+              :label="item.currency_name"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -93,7 +98,9 @@
 
 <script>
 import { getBusinessWallet, addBusinessWallet } from "@/api/merchant";
-import { getsChannelCurrency } from "@/api/currencyChannel";
+import { getsCurrency } from "@/api/currency";
+import { filterNumber } from "@/utils/func";
+
 export default {
   data() {
     return {
@@ -116,6 +123,7 @@ export default {
     };
   },
   methods: {
+      filterNumber,
     // 重置
     resetForm() {
       this.$refs.filters.resetFields();
@@ -137,7 +145,7 @@ export default {
     },
     // 获取货币列表
     getCurreny() {
-      getsChannelCurrency({
+        getsCurrency({
           page:1,
           limit:100
       })

@@ -290,7 +290,7 @@
 
                 <div class="info-item">
                     <span>回调状态</span>
-                    <span>{{ getOptionsText(orderStatusOptions, detail.sell_notify_status) }}</span>
+                    <span>{{ getOptionsText(notifyStatus, detail.sell_notify_status) }}</span>
                 </div>
 
                 <div class="info-item">

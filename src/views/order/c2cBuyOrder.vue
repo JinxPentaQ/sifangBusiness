@@ -241,11 +241,11 @@
         </div>
         <div class="info-item">
           <span>手续费</span>
-          <span>{{ detail.buy_amount }}</span>
+          <span>{{ detail.buy_fee }}</span>
         </div>
         <div class="info-item">
           <span>手续费率</span>
-          <span>{{ detail.buy_amount }}</span>
+          <span>{{ detail.sell_fee_rate }}</span>
         </div>
         <div class="info-item">
           <span>币种</span>
@@ -278,7 +278,7 @@
 
         <div class="info-item">
             <span>回调状态</span>
-            <span>{{ getOptionsText(orderStatusOptions, detail.sell_notify_status) }}</span>
+            <span>{{ getOptionsText(notifyStatus, detail.sell_notify_status) }}</span>
         </div>
 
         <div class="info-item">
@@ -296,7 +296,7 @@
 </template>
 <script>
 import { getOrders, getOrder } from "@/api/order";
-import { orderStatusOptions, orderTypeOptions } from "@/utils/const";
+import { orderStatusOptions, orderTypeOptions ,notifyStatus} from "@/utils/const";
 import { getOptionsText,filterNumber } from "@/utils/func";
 export default {
   data() {
@@ -318,6 +318,7 @@ export default {
       infoVisible: false,
       detail: {},
       orderStatusOptions,
+      notifyStatus,
       orderTypeOptions,
     };
   },

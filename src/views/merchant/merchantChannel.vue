@@ -23,19 +23,25 @@
           prop="channel_currency_name"
           label="通道_币种"
           align="left"
-          min-width="120"
+          min-width="150"
+        />
+        <el-table-column
+          prop="channel_name"
+          label="通道"
+          align="left"
+          min-width="130"
         />
         <el-table-column
           prop="currency_name"
           label="币种"
           align="left"
-          min-width="100"
+          min-width="80"
         />
         <el-table-column
           prop="buy_rate"
           label="代收费率"
           align="left"
-          min-width="100"
+          min-width="80"
         >
             <template slot-scope="scope">
                 {{ filterNumber( scope.row.buy_rate) }}
@@ -45,7 +51,7 @@
           prop="buy_is_open"
           label="代收通道状态"
           align="left"
-          min-width="100"
+          min-width="60"
         >
           <template slot-scope="scope">
             {{ getOptionsText(channelOpenOptions, scope.row.buy_is_open) }}
@@ -56,7 +62,7 @@
           prop="buy_max_amount"
           label="代收最大金额"
           align="left"
-          min-width="100"
+          min-width="80"
         >
           <template slot-scope="scope">
             {{ filterNumber( scope.row.buy_max_amount) }}
@@ -67,7 +73,7 @@
           prop="buy_min_amount"
           label="代收最小金额"
           align="left"
-          min-width="100"
+          min-width="60"
         >
         <template slot-scope="scope">
             {{ filterNumber( scope.row.buy_min_amount) }}
@@ -77,7 +83,7 @@
           prop="sell_rate"
           label="代付费率"
           align="left"
-          min-width="100"
+          min-width="60"
         >
             <template slot-scope="scope">
                 {{ filterNumber( scope.row.sell_rate) }}
@@ -87,7 +93,7 @@
           prop="sell_is_open"
           label="代付通道状态"
           align="left"
-          min-width="100"
+          min-width="60"
         >
           <template slot-scope="scope">
             {{ getOptionsText(channelOpenOptions, scope.row.sell_is_open) }}
@@ -99,7 +105,7 @@
           prop="sell_max_amount"
           label="代付最大金额"
           align="left"
-          min-width="100"
+          min-width="80"
         >
             <template slot-scope="scope">
                 {{ filterNumber( scope.row.sell_max_amount) }}
@@ -109,7 +115,7 @@
           prop="sell_min_amount"
           label="代付最小金额"
           align="left"
-          min-width="100"
+          min-width="60"
         >
             <template slot-scope="scope">
                 {{ filterNumber( scope.row.sell_min_amount) }}
