@@ -5,7 +5,7 @@ import {  Message } from 'element-ui'
 console.log()
 // create an axios instance
 const service = axios.create({
-  baseURL: 'https://service.tmqpay.com/', // url = base url + request url
+  baseURL: "https://ser.business.wdroplet.com/", // url = base url + request url
   // withCredentials: true,  // send cookies when cross-domain requests
   timeout: 20000 // request timeout
 })
