@@ -351,7 +351,7 @@ export default {
         .then((res) => {
           this.listLoading = false;
           this.tableData = res.items;
-          this.totalNum = res.allnum;
+          this.total = res.total;
         })
         .catch((err) => {
           console.log(err);
