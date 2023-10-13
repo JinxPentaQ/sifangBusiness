@@ -1,11 +1,6 @@
 <template>
   <section class="page-container">
     <div class="tableDivs">
-      <div class="toolNav">
-        <div class="toolNavList">
-
-        </div>
-      </div>
       <!--列表-->
       <el-table
         border

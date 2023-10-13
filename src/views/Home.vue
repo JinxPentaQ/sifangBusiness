@@ -4,9 +4,10 @@
       <el-col
         class="logo"
         style="width: 227px; cursor: pointer"
-        @click.native="$router.push({ path: '/welcome' })"
+        @click.native="$router.push({ path: '/dashBoard' })"
       >
-        商户系统
+        <img src="../assets/hdLogo.png" alt="" />
+        恒达商户管理系统
       </el-col>
       <div class="userinfo">
         <!-- <span divided class="rightBtn">
@@ -56,7 +57,9 @@
           >
             <template v-for="(item, index) in routeList">
               <el-submenu v-if="item.children" :key="index" :index="item.path">
-                <template slot="title"> <i :class="item.icon"></i> {{ item.name }}</template>
+                <template slot="title">
+                  <i :class="item.icon"></i> {{ item.name }}</template
+                >
                 <div
                   v-for="(subItem, subIndex) in item.children"
                   :key="subIndex"
@@ -85,6 +88,7 @@
           <el-scrollbar style="height: 100%">
             <div :span="24" class="content-wrapper">
               <div class="title">
+                <div class="title-name">{{ $route.name }}</div>
                 <el-breadcrumb separator="/">
                   <el-breadcrumb-item
                     v-for="(route, index) in $route.matched"
@@ -142,7 +146,7 @@ export default {
       navList: [
         {
           menu_name: "统计",
-          routing_url: "/welcome",
+          routing_url: "/dashBoard",
         },
       ],
       activeClass: 0,
@@ -161,7 +165,7 @@ export default {
     logout() {
       var _this = this;
       this.$confirm("确认退出吗?", "提示", {
-        type: 'warning'
+        type: "warning",
       })
         .then(() => {
           sessionStorage.removeItem("user");
@@ -243,13 +247,12 @@ export default {
     }
     .logo {
       height: 60px;
-      font-size: 22px;
-      padding-left: 20px;
-      padding-right: 20px;
+      font-size: 18px;
+      padding-left: 8px;
       img {
         width: 40px;
         float: left;
-        margin: 10px 10px 10px 18px;
+        margin: 10px 10px 10px ;
       }
       .txt {
         color: #fff;
@@ -315,9 +318,22 @@ export default {
       }
       .content-wrapper {
         .title {
-          padding: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 40px;
+          padding: 10px 20px;
           background-color: #fff;
           margin-bottom: 20px;
+          box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+          .title-name {
+            height: 40px;
+            font-size: 24px;
+            color: #455a64;
+          }
+          .el-breadcrumb {
+            font-size: 12px;
+          }
         }
       }
     }
