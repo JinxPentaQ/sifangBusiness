@@ -1,7 +1,7 @@
 <template>
   <div class="bgDiv">
     <div class="titContent">
-      <p>商户系统</p>
+      <p>恒达商户管理系统</p>
       <label>MERCHANT MANGEMENT SYSTEM</label>
     </div>
     <div class="news">
@@ -165,7 +165,7 @@ export default {
                   "token",
                   JSON.stringify(res.token)
                 );
-                this.$router.push({ path: "/welcome" });
+                this.$router.push({ path: "/dashBoard" });
                 location.reload();
             })
         } else {
@@ -199,7 +199,7 @@ export default {
     height: 100%;
     float: left;
     color: #fff;
-    background: url("../assets/logbg1.jpg") no-repeat center center;
+    background: url("../assets/bg.png") no-repeat center center;
   }
   .titContent p:first-child {
     font-size: 50px;

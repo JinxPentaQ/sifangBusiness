@@ -18,7 +18,11 @@
             clearable
           ></el-input>
         </el-form-item>
-        <el-form-item label="外部单号" prop="ext_order_no" :label-width="labelWidth">
+        <el-form-item
+          label="外部单号"
+          prop="ext_order_no"
+          :label-width="labelWidth"
+        >
           <el-input
             v-model="filters.ext_order_no"
             placeholder="外部单号"
@@ -40,16 +44,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
-<!--        <el-form-item label="通道" prop="type" :label-width="labelWidth">-->
-<!--          <el-select v-model="filters.type" placeholder="通道" clearable>-->
-<!--            <el-option-->
-<!--              v-for="(item, index) in orderTypeOptions"-->
-<!--              :label="item.text"-->
-<!--              :value="item.value"-->
-<!--              :key="index"-->
-<!--            ></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="通道" prop="type" :label-width="labelWidth">-->
+        <!--          <el-select v-model="filters.type" placeholder="通道" clearable>-->
+        <!--            <el-option-->
+        <!--              v-for="(item, index) in orderTypeOptions"-->
+        <!--              :label="item.text"-->
+        <!--              :value="item.value"-->
+        <!--              :key="index"-->
+        <!--            ></el-option>-->
+        <!--          </el-select>-->
+        <!--        </el-form-item>-->
         <!-- <el-form-item label="交易时间" prop="date" :label-width="labelWidth">
           <el-date-picker
             v-model="filters.date"
@@ -75,6 +79,34 @@
     </el-col>
 
     <div class="tableDivs">
+      <div class="toolNav">
+        <div class="toolTotal">
+          <div class="totalItem">
+            今日成功交易总额：
+            <div class="totalValue totalAmount">
+              {{ orderTotalInfo.total_success_amount || 0 }}元
+            </div>
+          </div>
+          <div class="totalItem">
+            今日成功交易笔数：
+            <div class="totalValue totalCount">
+              {{ orderTotalInfo.success_count || 0 }}笔
+            </div>
+          </div>
+          <div class="totalItem">
+            今日实际到账：
+            <div class="totalValue totalReal">
+              {{ orderTotalInfo.reality_amount || 0 }}元
+            </div>
+          </div>
+          <div class="totalItem">
+            今日失败笔数：
+            <div class="totalValue totalError">
+              {{ orderTotalInfo.failure_count || 0 }}笔
+            </div>
+          </div>
+        </div>
+      </div>
       <!--列表-->
       <el-table
         border
@@ -82,21 +114,36 @@
         highlight-current-row
         v-loading="listLoading"
       >
-        <el-table-column prop="order_no" label="订单号" align="left" min-width="130">
+        <el-table-column
+          prop="order_no"
+          label="订单号"
+          align="left"
+          min-width="130"
+        >
           <template slot-scope="scope">
             <el-tooltip :content="scope.row.order_no" placement="top">
               <p>{{ scope.row.order_no }}</p>
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column prop="ext_order_no" label="外部单号" align="left" min-width="130">
+        <el-table-column
+          prop="ext_order_no"
+          label="外部单号"
+          align="left"
+          min-width="130"
+        >
           <template slot-scope="scope">
             <el-tooltip :content="scope.row.ext_order_no" placement="top">
               <p>{{ scope.row.ext_order_no }}</p>
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column prop="channel_currency_name" label="通道名称" align="left" min-width="120">
+        <el-table-column
+          prop="channel_currency_name"
+          label="通道名称"
+          align="left"
+          min-width="120"
+        >
         </el-table-column>
         <el-table-column
           prop="buy_fee"
@@ -104,24 +151,24 @@
           align="left"
           min-width="60"
         >
-            <template slot-scope="scope">
-                {{ filterNumber(scope.row.buy_fee) }}
-            </template>
+          <template slot-scope="scope">
+            {{ filterNumber(scope.row.buy_fee) }}
+          </template>
         </el-table-column>
-<!--        <el-table-column-->
-<!--          prop="buy_fee_rate"-->
-<!--          label="手续费率"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="buy_fee_rate"-->
+        <!--          label="手续费率"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
         <el-table-column
           prop="buy_amount"
           label="金额"
           align="left"
           min-width="80"
         >
-            <template slot-scope="scope">
-                {{ filterNumber(scope.row.buy_amount) }}
-            </template>
+          <template slot-scope="scope">
+            {{ filterNumber(scope.row.buy_amount) }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="buy_currency_code"
@@ -129,11 +176,11 @@
           align="left"
           min-width="60"
         ></el-table-column>
-<!--        <el-table-column-->
-<!--          prop="channel_code"-->
-<!--          label="通道代码"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="channel_code"-->
+        <!--          label="通道代码"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
 
         <el-table-column
           prop="status"
@@ -145,65 +192,60 @@
             {{ getOptionsText(orderStatusOptions, scope.row.status) }}
           </template>
         </el-table-column>
-<!--        <el-table-column-->
-<!--          prop="type"-->
-<!--          label="订单类型"-->
-<!--          align="left"-->
-<!--          min-width="120"-->
-<!--        >-->
-<!--          <template slot-scope="scope">-->
-<!--            {{ getOptionsText(orderTypeOptions, scope.row.type) }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="seller_user_name"-->
-<!--          label="卖方"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="sell_fee"-->
-<!--          label="卖方手续费"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="sell_fee_rate"-->
-<!--          label="卖方手续费率"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="sell_amount"-->
-<!--          label="卖出金额"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="sell_currency_code"-->
-<!--          label="卖出货币类型"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="remark"-->
-<!--          label="备注"-->
-<!--          align="left"-->
-<!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="type"-->
+        <!--          label="订单类型"-->
+        <!--          align="left"-->
+        <!--          min-width="120"-->
+        <!--        >-->
+        <!--          <template slot-scope="scope">-->
+        <!--            {{ getOptionsText(orderTypeOptions, scope.row.type) }}-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="seller_user_name"-->
+        <!--          label="卖方"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="sell_fee"-->
+        <!--          label="卖方手续费"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="sell_fee_rate"-->
+        <!--          label="卖方手续费率"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="sell_amount"-->
+        <!--          label="卖出金额"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          prop="sell_currency_code"-->
+        <!--          label="卖出货币类型"-->
+        <!--          align="left"-->
+        <!--        ></el-table-column>-->
+        <el-table-column
+          prop="remark"
+          label="备注"
+          align="left"
+        ></el-table-column>
         <el-table-column
           prop="update_time"
           label="更新时间"
           align="left"
           min-width="100"
         ></el-table-column>
-        <el-table-column
-          label="操作"
-          align="left"
-          min-width="100"
-          fixed="right"
-        >
+        <el-table-column label="操作" align="left" width="100px" fixed="right">
           <template slot-scope="scope">
             <el-button
               type="primary"
               size="mini"
               @click="handleDetail(scope.row.id)"
-              >详情</el-button
-            >
+              >详情
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -219,10 +261,10 @@
       ></el-pagination>
       <!--订单详情-->
       <el-dialog title="订单详情" :visible.sync="infoVisible" width="50%">
-<!--        <div class="info-item">-->
-<!--          <span>订单类型</span>-->
-<!--          <span> {{ getOptionsText(orderTypeOptions, detail.type) }}</span>-->
-<!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>订单类型</span>-->
+        <!--          <span> {{ getOptionsText(orderTypeOptions, detail.type) }}</span>-->
+        <!--        </div>-->
         <div class="info-item">
           <span>订单状态</span>
           <span>{{ getOptionsText(orderStatusOptions, detail.status) }}</span>
@@ -231,10 +273,10 @@
           <span>通道</span>
           <span>{{ detail.channel_code }}</span>
         </div>
-<!--        <div class="info-item">-->
-<!--          <span>买方</span>-->
-<!--          <span>{{ detail.buyer_user_name }}</span>-->
-<!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>买方</span>-->
+        <!--          <span>{{ detail.buyer_user_name }}</span>-->
+        <!--        </div>-->
         <div class="info-item">
           <span>金额</span>
           <span>{{ detail.buy_amount }}</span>
@@ -251,42 +293,44 @@
           <span>币种</span>
           <span>{{ detail.buy_currency_code }}</span>
         </div>
-<!--        <div class="info-item">-->
-<!--          <span>交易手续费</span>-->
-<!--          <span>{{ detail.exchange_rates }}</span>-->
-<!--        </div>-->
-<!--        <div class="info-item">-->
-<!--          <span>卖方</span>-->
-<!--          <span>{{ detail.seller_user_name }}</span>-->
-<!--        </div>-->
-<!--        <div class="info-item">-->
-<!--          <span>卖出金额</span>-->
-<!--          <span>{{ detail.sell_amount }}</span>-->
-<!--        </div>-->
-<!--        <div class="info-item">-->
-<!--          <span>卖出手续费</span>-->
-<!--          <span>{{ detail.sell_fee }}</span>-->
-<!--        </div>-->
-<!--        <div class="info-item">-->
-<!--          <span>卖出手续费率</span>-->
-<!--          <span>{{ detail.sell_fee_rate }}</span>-->
-<!--        </div>-->
-<!--        <div class="info-item">-->
-<!--          <span>卖出币种</span>-->
-<!--          <span>{{ detail.sell_currency_id }}</span>-->
-<!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>交易手续费</span>-->
+        <!--          <span>{{ detail.exchange_rates }}</span>-->
+        <!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>卖方</span>-->
+        <!--          <span>{{ detail.seller_user_name }}</span>-->
+        <!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>卖出金额</span>-->
+        <!--          <span>{{ detail.sell_amount }}</span>-->
+        <!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>卖出手续费</span>-->
+        <!--          <span>{{ detail.sell_fee }}</span>-->
+        <!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>卖出手续费率</span>-->
+        <!--          <span>{{ detail.sell_fee_rate }}</span>-->
+        <!--        </div>-->
+        <!--        <div class="info-item">-->
+        <!--          <span>卖出币种</span>-->
+        <!--          <span>{{ detail.sell_currency_id }}</span>-->
+        <!--        </div>-->
 
         <div class="info-item">
-            <span>回调状态</span>
-            <span>{{ getOptionsText(notifyStatus, detail.sell_notify_status) }}</span>
+          <span>回调状态</span>
+          <span>{{
+            getOptionsText(notifyStatus, detail.sell_notify_status)
+          }}</span>
         </div>
 
         <div class="info-item">
-            <span>通知结果</span>
-            <span>{{ detail.sell_notify_content }}</span>
+          <span>通知结果</span>
+          <span>{{ detail.sell_notify_content }}</span>
         </div>
 
-          <div class="info-item">
+        <div class="info-item">
           <span>备注</span>
           <span>{{ detail.remark }}</span>
         </div>
@@ -295,9 +339,14 @@
   </div>
 </template>
 <script>
-import { getOrders, getOrder } from "@/api/order";
-import { orderStatusOptions, orderTypeOptions ,notifyStatus} from "@/utils/const";
-import { getOptionsText,filterNumber } from "@/utils/func";
+import { getOrders, getOrder, getOrderStatistics } from "@/api/order";
+import {
+  orderStatusOptions,
+  orderTypeOptions,
+  notifyStatus,
+  c2cOrderType,
+} from "@/utils/const";
+import { getOptionsText, filterNumber } from "@/utils/func";
 export default {
   data() {
     return {
@@ -317,6 +366,7 @@ export default {
       listLoading: false,
       infoVisible: false,
       detail: {},
+      orderTotalInfo: {},
       orderStatusOptions,
       notifyStatus,
       orderTypeOptions,
@@ -324,7 +374,7 @@ export default {
   },
   methods: {
     getOptionsText,
-      filterNumber,
+    filterNumber,
     //分页
     handleCurrentChange(val) {
       this.page = val;
@@ -368,29 +418,80 @@ export default {
           console.log(err);
         });
     },
+    getOrderTotal() {
+      getOrderStatistics({ type: c2cOrderType.collect }).then((res) => {
+        this.orderTotalInfo = res;
+      });
+    },
   },
   mounted() {
     this.getList();
+    this.getOrderTotal();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.toolNav {
+  .toolTotal {
+    display: flex;
+    color: #67757c;
+    font-size: 14px;
+    padding: 8px;
+    .totalItem {
+      display: flex;
+      align-items: center;
+    }
+    .totalValue {
+      height: 20px;
+      line-height: 20px;
+      color: #fff !important;
+      font-size: 12px;
+      text-align: center;
+      white-space: nowrap;
+      margin-right: 10px;
+      padding: 2px 8px;
+      text-align: center;
+      white-space: nowrap;
+      border-radius: 4px;
+    }
+    .totalAmount {
+      background: #fc4b6c;
+    }
+    .totalCount {
+      background-color: #1e88e5;
+    }
+    .totalReal {
+      background-color: #009688;
+    }
+    .totalError {
+      background-color: #ff5722;
+    }
+  }
+}
 .el-button + .el-button {
   margin-left: 0 !important;
 }
 .el-dialog__body {
   .info-item {
+    border: 1px solid #e2e2e2;
+    border-bottom: none;
     span:nth-child(1) {
-      width: 120px;
       display: inline-block;
+      width: 100px;
       font-weight: 700;
       font-size: 14px;
       color: #606266;
-      line-height: 30px;
-      text-align: right;
-      padding-right: 20px;
+      line-height: 40px;
+      padding-left: 10px;
+      border-right: 1px solid #e2e2e2;
     }
+    span:nth-child(2) {
+      padding-left: 10px;
+    }
+  }
+  .info-item:last-child{
+    border-bottom: 1px solid #e2e2e2;
   }
 }
 </style>

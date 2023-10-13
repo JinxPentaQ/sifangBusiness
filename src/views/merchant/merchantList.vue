@@ -1,90 +1,105 @@
 <template>
   <section class="page-container">
     <el-card class="box-card">
-      <div class="info-item">
-        <span>商户编号</span>
-        <span>{{ detail.business_no }}</span>
-      </div>
-      <div class="info-item">
-        <span>商户名称</span>
-        <span>{{ detail.name }}</span>
-      </div>
-      <div class="info-item">
-        <span>商户状态</span>
-        <el-tag
-          :type="detail.status === merchantStatus.open ? 'success' : 'info'"
-          >{{ getOptionsText(merchantStatusOptions, detail.status) }}</el-tag
+      <div class="infoOperate">
+        <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-set-up"
+          @click="handelResetPk()"
+          >重置密钥</el-button
+        >
+        <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-wallet"
+          @click="handleWallet(detail.id)"
+          >查看钱包</el-button
+        >
+        <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-notebook-2"
+          @click="handleWalletRecords(detail.id)"
+          >钱包记录</el-button
         >
       </div>
+
       <div class="info-item">
-        <span>商户账号</span>
-        <span>{{ detail.account }}</span>
+        <div class="title">商户编号</div>
+        <div class="content">{{ detail.business_no }}</div>
       </div>
       <div class="info-item">
-        <span>密钥</span>
-        <span>{{ detail.private_key }}</span>
+        <div class="title">商户名称</div>
+        <div class="content">{{ detail.name }}</div>
       </div>
       <div class="info-item">
-        <span>备注</span>
-        <span>{{ detail.remark }}</span>
-      </div>
-      <div class="info-item">
-        <span>API白名单</span>
-        <div v-if="apiWhiteListVisible" class="item-edit">
-          <el-input v-model="detail.api_white_list"></el-input>
-          <el-button type="primary" size="mini" @click="handleSaveApi"
-            >保存</el-button
+        <div class="title">商户状态</div>
+        <div class="content">
+          <el-tag
+            :type="detail.status === merchantStatus.open ? 'success' : 'info'"
+            >{{ getOptionsText(merchantStatusOptions, detail.status) }}</el-tag
           >
         </div>
-        <div v-else class="item-edit">
-          <span>{{ detail.api_white_list }}</span>
-          <el-button
-            type="primary"
-            icon="el-icon-edit"
-            size="mini"
-            @click="apiWhiteList"
-          ></el-button>
+      </div>
+      <div class="info-item">
+        <div class="title">商户账号</div>
+        <div class="content">{{ detail.account }}</div>
+      </div>
+      <div class="info-item">
+        <div class="title">密钥</div>
+        <div class="content">{{ detail.private_key }}</div>
+      </div>
+      <div class="info-item">
+        <div class="title">备注</div>
+        <div class="content">{{ detail.remark }}</div>
+      </div>
+      <div class="info-item">
+        <div class="title">API白名单</div>
+        <div class="content">
+          <div v-if="apiWhiteListVisible" class="item-edit">
+            <el-input v-model="detail.api_white_list"></el-input>
+            <el-button
+              type="primary"
+              size="mini"
+              @click="apiWhiteListVisible = false"
+              >取消</el-button
+            >
+            <el-button type="primary" size="mini" @click="handleSaveApi"
+              >保存</el-button
+            >
+          </div>
+          <div v-else class="item-edit">
+            <div>{{ detail.api_white_list }}</div>
+            <el-button type="primary" size="mini" @click="apiWhiteList"
+              >编辑</el-button
+            >
+          </div>
         </div>
       </div>
       <div class="info-item">
-        <span>商户后台登录白名单</span>
-        <div v-if="loginWhiteListVisible" class="item-edit">
-          <el-input v-model="detail.whitelist"></el-input>
-          <el-button type="primary" size="mini" @click="handleSaveWhiteList"
-            >保存</el-button
-          >
-        </div>
-        <div v-else class="item-edit">
-          <span>{{ detail.whitelist }}</span>
-          <el-button
-            type="primary"
-            icon="el-icon-edit"
-            size="mini"
-            @click="loginWhiteList"
-          ></el-button>
+        <div class="title">商户后台登录白名单</div>
+        <div class="content">
+          <div v-if="loginWhiteListVisible" class="item-edit">
+            <el-input v-model="detail.whitelist"></el-input>
+            <el-button
+              type="primary"
+              size="mini"
+              @click="loginWhiteListVisible = false"
+              >取消</el-button
+            >
+            <el-button type="primary" size="mini" @click="handleSaveWhiteList"
+              >保存</el-button
+            >
+          </div>
+          <div v-else class="item-edit">
+            <div>{{ detail.whitelist }}</div>
+            <el-button type="primary" size="mini" @click="loginWhiteList"
+              >编辑</el-button
+            >
+          </div>
         </div>
       </div>
-      <el-button
-        type="text"
-        size="mini"
-        icon="el-icon-set-up"
-        @click="handelResetPk()"
-        >重置密钥</el-button
-      >
-      <el-button
-        type="text"
-        size="mini"
-        icon="el-icon-wallet"
-        @click="handleWallet(detail.id)"
-        >查看钱包</el-button
-      >
-      <el-button
-        type="text"
-        size="mini"
-        icon="el-icon-notebook-2"
-        @click="handleWalletRecords(detail.id)"
-        >钱包记录</el-button
-      >
     </el-card>
   </section>
 </template>
@@ -189,20 +204,40 @@ export default {
 .page-container {
   .box-card {
     padding: 20px;
+    .infoOperate {
+      margin-bottom: 20px;
+    }
   }
   .info-item {
     display: flex;
-    padding: 10px 0;
-    span:nth-child(1) {
+    align-items: center;
+    border: 1px solid #e2e2e2;
+    border-bottom: none;
+    color: #67757C;
+    .title {
+      display: inline-block;
       width: 140px;
-      color: #888;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 40px;
+      padding-left: 10px;
+      border-right: 1px solid #e2e2e2;
     }
-    .item-edit {
+    .content {
       display: flex;
-      .el-button--mini {
-        margin-left: 10px;
+      align-items: center;
+      padding-left: 10px;
+      .item-edit {
+        display: flex;
+        align-items: center;
+        .el-button--mini {
+          margin-left: 10px;
+        }
       }
     }
+  }
+  .info-item:last-child {
+    border-bottom: 1px solid #e2e2e2;
   }
 }
 </style>

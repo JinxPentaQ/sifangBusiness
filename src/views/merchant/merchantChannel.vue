@@ -1,17 +1,6 @@
 <template>
   <section class="page-container">
     <div class="tableDivs">
-      <div class="toolNav">
-        <div class="toolNavList">
-<!--          <el-button-->
-<!--            type="primary"-->
-<!--            icon="el-icon-circle-plus-outline"-->
-<!--            size="small"-->
-<!--            @click="newsFormVisible = true"-->
-<!--            >添加</el-button-->
-<!--          >-->
-        </div>
-      </div>
       <!--列表-->
       <el-table
         border
@@ -43,9 +32,9 @@
           align="left"
           min-width="80"
         >
-            <template slot-scope="scope">
-                {{ filterNumber( scope.row.buy_rate) }}
-            </template>
+          <template slot-scope="scope">
+            {{ filterNumber(scope.row.buy_rate) }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="buy_is_open"
@@ -54,7 +43,12 @@
           min-width="60"
         >
           <template slot-scope="scope">
-            {{ getOptionsText(channelOpenOptions, scope.row.buy_is_open) }}
+            <el-switch
+              :inactive-value="0"
+              :active-value="1"
+              v-model="scope.row.buy_is_open"
+              @change="handleBuyStatusChange($event, scope.row)"
+            ></el-switch>
           </template>
         </el-table-column>
 
@@ -65,7 +59,7 @@
           min-width="80"
         >
           <template slot-scope="scope">
-            {{ filterNumber( scope.row.buy_max_amount) }}
+            {{ filterNumber(scope.row.buy_max_amount) }}
           </template>
         </el-table-column>
 
@@ -75,9 +69,9 @@
           align="left"
           min-width="60"
         >
-        <template slot-scope="scope">
-            {{ filterNumber( scope.row.buy_min_amount) }}
-        </template>
+          <template slot-scope="scope">
+            {{ filterNumber(scope.row.buy_min_amount) }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="sell_rate"
@@ -85,21 +79,25 @@
           align="left"
           min-width="60"
         >
-            <template slot-scope="scope">
-                {{ filterNumber( scope.row.sell_rate) }}
-            </template>
+          <template slot-scope="scope">
+            {{ filterNumber(scope.row.sell_rate) }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="sell_is_open"
-          label="代付通道状态"
+          label="代付通道"
           align="left"
           min-width="60"
         >
           <template slot-scope="scope">
-            {{ getOptionsText(channelOpenOptions, scope.row.sell_is_open) }}
+            <el-switch
+              :inactive-value="0"
+              :active-value="1"
+              v-model="scope.row.sell_is_open"
+              @change="handleSellStatusChange($event, scope.row)"
+            ></el-switch>
           </template>
         </el-table-column>
-
 
         <el-table-column
           prop="sell_max_amount"
@@ -107,9 +105,9 @@
           align="left"
           min-width="80"
         >
-            <template slot-scope="scope">
-                {{ filterNumber( scope.row.sell_max_amount) }}
-            </template>
+          <template slot-scope="scope">
+            {{ filterNumber(scope.row.sell_max_amount) }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="sell_min_amount"
@@ -117,15 +115,8 @@
           align="left"
           min-width="60"
         >
-            <template slot-scope="scope">
-                {{ filterNumber( scope.row.sell_min_amount) }}
-            </template>
-        </el-table-column>
-        <el-table-column label="操作" align="left">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)" size="mini"
-              >编辑</el-button
-            >
+            {{ filterNumber(scope.row.sell_min_amount) }}
           </template>
         </el-table-column>
       </el-table>
@@ -140,100 +131,21 @@
         style="float: right; margin: 15px"
       ></el-pagination>
     </div>
-<!--    &lt;!&ndash;新增&ndash;&gt;-->
-<!--    <el-dialog-->
-<!--      title="添加商户通道配置"-->
-<!--      :visible.sync="newsFormVisible"-->
-<!--      width="50%"-->
-<!--    >-->
-<!--      <el-form :model="news" ref="news" :rules="rules">-->
-<!--        <el-form-item-->
-<!--          prop="channel_currency_id"-->
-<!--          label="通道货币"-->
-<!--          :label-width="formLabelWidth"-->
-<!--        >-->
-<!--          <el-select v-model="news.channel_currency_id" placeholder="货币">-->
-<!--            <el-option-->
-<!--              v-for="item in currencyList"-->
-<!--              :key="item.id"-->
-<!--              :label="item.channel_currency_name"-->
-<!--              :value="item.id"-->
-<!--            ></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
-<!--      <div slot="footer" class="dialog-footer">-->
-<!--        <el-button type="primary" size="mini" @click="handleAdd('news')"-->
-<!--          >确定</el-button-->
-<!--        >-->
-<!--        <el-button size="mini" @click="newsFormVisible = false">取消</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
-<!--    &lt;!&ndash;新增&ndash;&gt;-->
-    <el-dialog
-      title="编辑商户通道配置"
-      :visible.sync="editFormVisible"
-      width="50%"
-    >
-      <el-form :model="edit" ref="edit" :rules="rules">
-
-        <el-form-item
-          prop="buy_is_open"
-          label="代收通道是否开启"
-          :label-width="formLabelWidth"
-        >
-          <el-select v-model="edit.buy_is_open" placeholder="代收通道是否开启">
-            <el-option
-              v-for="item in channelOpenOptions"
-              :key="item.value"
-              :label="item.text"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item
-          prop="sell_is_open"
-          label="代付通道是否开启"
-          :label-width="formLabelWidth"
-        >
-          <el-select v-model="edit.sell_is_open" placeholder="代付通道是否开启">
-            <el-option
-              v-for="item in channelOpenOptions"
-              :key="item.value"
-              :label="item.text"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="mini" @click="editSubmit('edit')"
-          >确定</el-button
-        >
-        <el-button size="mini" @click="editFormVisible = false">取消</el-button>
-      </div>
-    </el-dialog>
   </section>
 </template>
 
 <script>
 import {
   getsBusinessChannelConfig,
-  addBusinessChannelConfig,
   modBusinessChannelConfig,
 } from "@/api/merchantChannel";
-import {
-  getsChannelCurrency,
-} from "@/api/currencyChannel";
 import {
   channelOpen,
   bySellType,
   channelOpenOptions,
   bySellTypeOptions,
 } from "@/utils/const";
-import { getOptionsText,filterNumber } from "@/utils/func";
+import { getOptionsText, filterNumber } from "@/utils/func";
 export default {
   data() {
     return {
@@ -241,26 +153,11 @@ export default {
         current_id: "",
       },
       tableData: [],
-      currencyList: [],
       total: 0,
       page: 1,
       pageSize: 10,
       listLoading: false,
       labelWidth: "100px",
-      formLabelWidth: "140px",
-      newsFormVisible: false,
-      editFormVisible: false,
-      //添加商户
-      news: {
-        channel_currency_id: "",
-        business_id: "",
-      },
-      edit: {},
-      rules: {
-        current_id: [
-          { required: true, message: "请选择货币", trigger: "change" },
-        ],
-      },
       channelOpen,
       bySellType,
       channelOpenOptions,
@@ -269,7 +166,7 @@ export default {
   },
   methods: {
     getOptionsText,
-      filterNumber,
+    filterNumber,
     //分页
     handleCurrentChange(val) {
       this.page = val;
@@ -290,7 +187,7 @@ export default {
       getsBusinessChannelConfig({
         business_id: this.$route.params.id,
         page: this.page,
-          limit: this.pageSize,
+        limit: this.pageSize,
       })
         .then((res) => {
           console.log(res, "ddd");
@@ -302,72 +199,29 @@ export default {
           console.log(err);
         });
     },
-    // 获取货币列表
-    getCurreny() {
-      getsChannelCurrency()
-        .then((res) => {
-          this.currencyList = res;
-        })
-        .catch((err) => {
-          console.log(err);
+    // 修改代付通道状态
+    handleSellStatusChange(status, row) {
+      modBusinessChannelConfig({ id: row.id, sell_is_open: status }).then(
+        () => {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+        }
+      );
+    },
+    // 修改代收通道状态
+    handleBuyStatusChange(status, row) {
+      modBusinessChannelConfig({ id: row.id, buy_is_open: status }).then(() => {
+        this.$message({
+          message: "修改成功",
+          type: "success",
         });
-    },
-    //添加商户通道配置
-    handleAdd(formName) {
-      this.listLoading = true;
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          addBusinessChannelConfig({
-            channel_currency_id: this.news.channel_currency_id,
-            business_id: this.$route.params.id,
-          })
-            .then(() => {
-              this.$message({
-                message: "添加成功",
-                type: "success",
-              });
-              this.$refs[formName].resetFields();
-              this.listLoading = false;
-              this.newsFormVisible = false;
-              this.getData();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
       });
-    },
-    //编辑商户通道配置
-    editSubmit(formName) {
-      this.listLoading = true;
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          modBusinessChannelConfig({ ...this.edit, id: this.$route.params.id })
-            .then(() => {
-              this.$message({
-                message: "操作成功",
-                type: "success",
-              });
-              this.$refs[formName].resetFields();
-              this.listLoading = false;
-              this.editFormVisible = false;
-              this.getData();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      });
-    },
-    // 编辑
-    handleEdit(row) {
-      this.edit = row;
-      this.editFormVisible = true;
     },
   },
   mounted() {
     this.getData();
-    this.getCurreny();
   },
 };
 </script>
