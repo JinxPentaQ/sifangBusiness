@@ -48,7 +48,7 @@
       </div>
       <div class="info-item">
         <div class="title">密钥</div>
-        <div class="content">{{ detail.private_key }}</div>
+        <div class="content">{{ detail.api_private_key }}</div>
       </div>
       <div class="info-item">
         <div class="title">备注</div>
@@ -81,7 +81,7 @@
         <div class="title">商户后台登录白名单</div>
         <div class="content">
           <div v-if="loginWhiteListVisible" class="item-edit">
-            <el-input v-model="detail.whitelist"></el-input>
+            <el-input v-model="detail.white_list"></el-input>
             <el-button
               type="primary"
               size="mini"
@@ -93,7 +93,7 @@
             >
           </div>
           <div v-else class="item-edit">
-            <div>{{ detail.whitelist }}</div>
+            <div>{{ detail.white_list }}</div>
             <el-button type="primary" size="mini" @click="loginWhiteList"
               >编辑</el-button
             >
@@ -183,7 +183,7 @@ export default {
     },
     handleSaveWhiteList() {
       modBusiness({
-        white_list: this.detail.whitelist,
+        white_list: this.detail.white_list,
       }).then((res) => {
         this.loginWhiteListVisible = false;
         this.$message({
